@@ -1,0 +1,188 @@
+Rearrange list
+You are given the head node of the linked list. You have to rearrange the nodes of the linked list in place.
+
+If the original list was L0 -> L1 ->…-> Ln-1 -> Ln, the rearranged list should be L0 -> Ln -> L1 -> Ln-1 -> L2 -> Ln-2…
+
+Note
+
+You need to only complete the function. Don't worry about input; it is for internal reference.
+
+Input Format
+The first line contains the number of test cases.
+
+For each test case: The first line of input contains N representing the number of nodes in linked list.
+
+The second line of input contains N space seperated integers, representing elements in linked list.
+
+Output Format
+Return the head of the rearranged list.
+
+Example 1
+Input
+
+1
+3
+1 2 3
+Output
+
+1 3 2
+Explanation
+
+We rearrange the order of nodes in said manner.
+
+Example 2
+Input
+
+1
+5
+1 2 3 4 5
+Output
+
+1 5 2 4 3
+Explanation
+
+We rearrange the order of nodes in said manner.
+
+Constraints
+1 <= T <= 10
+
+1 <= N <= 10000
+
+1 <= A[i] <= 1000000
+
+Topics
+Linked lists
+
+
+
+import java.util.*;
+import java.lang.*;
+
+class Node{
+    int data;
+    Node next;
+    Node(int key){
+        data = key;
+        next = null;
+    }
+}
+
+class Main{
+    static Node head;
+    static Node temp;
+    public static void main (String[] args) {
+        Scanner sc = new Scanner(System.in);
+        int t = sc.nextInt();
+        
+        while(t-- > 0){
+            int n = sc.nextInt();
+            int a1 = sc.nextInt();
+            head = null;
+            temp = null;
+            addToTheLast(a1);
+            
+            for(int i = 1; i < n; i++){
+                int data = sc.nextInt();
+                addToTheLast(data);
+            }
+            Solution ans = new Solution();
+            Node node = ans.rearrange(head);
+            printList(node);
+            System.out.println();
+        }
+    }
+    
+    public static void addToTheLast(int data){
+        if(head == null){
+			head = new Node(data);
+			temp =head;
+			return ;
+		}
+		else{
+			Node new_node = new Node(data);
+			temp.next = new_node;
+			temp=temp.next;
+			return;		
+		}
+    }
+    
+    public static void printList(Node node){
+        while(node != null){
+            System.out.print(node.data + " ");
+            node = node.next;
+        }
+    }
+}
+
+class Solution{
+
+  
+static int length(Node head) {
+        
+        int cnt = 0;
+        while(head != null) {
+            cnt++;
+            head = head.next;
+        }
+        
+        return cnt;
+    }
+
+    static Node rev(Node head) {
+
+        Node curr = head, prev = null;
+        while(curr!=null) {
+            Node next = curr.next;
+            curr.next = prev;
+            prev = curr;
+            curr = next;
+        }
+
+        return prev;
+    }
+
+    public static Node rearrange(Node node){
+
+        Node h1 = node;
+        int len = length(node);
+        int mid = (len + 1) / 2;
+
+        Node h2 = node;
+        while(mid-- > 0) {
+            h2 = h2.next;
+        }
+
+        h2 = rev(h2);
+
+        Node h3 = null, t3 = null;
+
+        mid = (len + 1) / 2;
+
+        while(mid-- > 0) {
+            Node nn = new Node(h1.data);
+            if(h3 == null) {
+                h3 = nn;
+                t3 = nn;
+            }
+            else 
+            {
+                t3.next = nn;
+                t3 = t3.next;
+            }
+
+            if( h2 !=  null) {
+                nn = new Node(h2.data);
+                t3.next = nn;
+                t3 = t3.next;
+                h2 = h2.next;
+            }
+            
+            h1 = h1.next;
+        }
+
+        return h3;
+}
+
+
+}
+
